@@ -37,8 +37,10 @@ The above command should have downloaded the entire SRTM dataset and split it in
 If you don't want to use the whole world, you can provide your own dataset in GeoTIFF format, compatible with the SRTM dataset. Simply drop the files for the regions you desire in the `data` directory. You are advised to split these files in smaller chunks so as to make Open-Elevation less memory-hungry (the largest file has to fit in memory). The `create-tiles.sh` is capable of doing this, and you can see it working in `create-dataset.sh`. Since you are using docker, you should always run the commands within the container. For example:
 
 ```
-docker run -t -i -v $(pwd)/data:/code/data openelevation/open-elevation /code/create-tiles.sh
+docker run -t -i -v $(pwd)/data:/code/data openelevation/open-elevation /code/create-tiles.sh  /code/data/SRTM_NE_250m.tif 10 10
 ```
+
+The above example command splits `SRTM_NE_250m.tif` into 10 by 10 files inside the `/code/data` directory, which is mapped to `$(pwd)/data`.
 
 
 ### Running the Server
@@ -70,7 +72,7 @@ The following are instructions for Ubuntu/Debian compatible distros, and similar
 
 ```
 apt-get update -y
-apt-get install -y libspatialindex-dev unrar-free
+apt-get install -y libspatialindex-dev unrar-free bc
 pip install -r requirements.txt
 ```
 
