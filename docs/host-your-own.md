@@ -13,7 +13,7 @@ cd open-elevation
 
 ## Using Docker
 
-An image of Open-Elevation is available at [DockerHub](FIXME). You can use this image as the basis for your Open-Elevation installation.
+An image of Open-Elevation is available at [DockerHub](https://hub.docker.com/r/openelevation/open-elevation/). You can use this image as the basis for your Open-Elevation installation.
 
 The Docker image roots itself at `/code/` and expects that all GeoTIFF datafiles be located at `/code/data/`, which you should mount using a volume.
 
