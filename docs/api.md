@@ -2,7 +2,7 @@
 
 Open-Elevation's API is extremely simple -- after all, it fits a single, specific, simple task. There is **only one endpoint**, which is documented here.
 
-## `GET api/v1/lookup`
+## `GET /api/v1/lookup`
 
 Returns ("looks up") the elevation at one or more `(latitude,longitude)` points.
 
