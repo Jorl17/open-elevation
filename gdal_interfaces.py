@@ -86,7 +86,7 @@ class GDALInterface(object):
         self.close()
 
 class GDALTileInterface(object):
-    def __init__(self, tiles_folder, summary_file, open_interfaces_size=25):
+    def __init__(self, tiles_folder, summary_file, open_interfaces_size=5):
         super(GDALTileInterface, self).__init__()
         self.tiles_folder = tiles_folder
         self.summary_file = summary_file
