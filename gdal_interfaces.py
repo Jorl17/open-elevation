@@ -25,7 +25,6 @@ class GDALInterface(object):
             'BOTTOM_RIGHT': (lrx, lry),
         }
 
-
     def loadMetadata(self):
         # open the raster and its spatial reference
         self.src = gdal.Open(self.tif_path)
@@ -87,11 +86,37 @@ class GDALInterface(object):
         self.close()
 
 class GDALTileInterface(object):
-    def __init__(self, tiles_folder, summary_file):
+    def __init__(self, tiles_folder, summary_file, open_interfaces_size=25):
         super(GDALTileInterface, self).__init__()
         self.tiles_folder = tiles_folder
         self.summary_file = summary_file
         self.index = index.Index()
+        self.cached_open_interfaces = []
+        self.cached_open_interfaces_dict = {}
+        self.open_interfaces_size = open_interfaces_size
+
+    def _open_gdal_interface(self, path):
+        if path in self.cached_open_interfaces_dict:
+            interface = self.cached_open_interfaces_dict[path]
+            self.cached_open_interfaces.remove(path)
+            self.cached_open_interfaces += [path]
+
+            return interface
+        else:
+
+            interface = GDALInterface(path)
+            self.cached_open_interfaces += [path]
+            self.cached_open_interfaces_dict[path] = interface
+
+            if len(self.cached_open_interfaces) > self.open_interfaces_size:
+                last_interface_path = self.cached_open_interfaces.pop(0)
+                last_interface = self.cached_open_interfaces_dict[last_interface_path]
+                last_interface.close()
+
+                self.cached_open_interfaces_dict[last_interface_path] = None
+                del self.cached_open_interfaces_dict[last_interface_path]
+
+            return interface
 
     def _all_files(self):
         return [f for f in listdir(self.tiles_folder) if isfile(join(self.tiles_folder, f)) and f.endswith(u'.tif')]
@@ -101,19 +126,19 @@ class GDALTileInterface(object):
         for file in self._all_files():
 
             full_path = join(self.tiles_folder,file)
-            with GDALInterface(full_path) as i:
-                coords = i.get_corner_coords()
-                all_coords += [
-                    {
-                        'file': full_path,
-                        'coords': ( coords['BOTTOM_RIGHT'][1],  # latitude min
-                                    coords['TOP_RIGHT'][1],  # latitude max
-                                    coords['TOP_LEFT'][0],  # longitude min
-                                    coords['TOP_RIGHT'][0],  # longitude max
+            i = self._open_gdal_interface(full_path)
+            coords = i.get_corner_coords()
+            all_coords += [
+                {
+                    'file': full_path,
+                    'coords': ( coords['BOTTOM_RIGHT'][1],  # latitude min
+                                coords['TOP_RIGHT'][1],  # latitude max
+                                coords['TOP_LEFT'][0],  # longitude min
+                                coords['TOP_RIGHT'][0],  # longitude max
 
-                                    )
-                    }
-                ]
+                                )
+                }
+            ]
 
         with open(self.summary_file, 'w') as f:
             json.dump(all_coords, f)
