@@ -16,7 +16,7 @@ A JSON object with a single list of results, in the `results` field is returned.
 
 If there is no recorded elevation at the provided coordinate, sea level (0 meters) is returned.
 
-```
+```json
 {
 	"results":
 	[
@@ -41,7 +41,7 @@ curl https://api.open-elevation.com/api/v1/lookup\?locations\=10,10\|20,20\|41.1
 
 #### Response
 
-```
+```json
 {
    "results":
    [
