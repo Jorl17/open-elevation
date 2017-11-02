@@ -31,6 +31,11 @@ def get_elevation(location_with_comma):
 
 @route('/api/v1/lookup')
 def lookup():
+    # Allow CORS
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
+
     locations = request.query.locations
 
     if not locations:
