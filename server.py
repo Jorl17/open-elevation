@@ -1,7 +1,7 @@
 import json
 
 import bottle
-from bottle import route, run, request, response
+from bottle import route, run, request, response, hook
 
 from gdal_interfaces import GDALTileInterface
 
@@ -29,16 +29,14 @@ def get_elevation(location_with_comma):
         'elevation': elevation
     }
 
-@route('/api/v1/lookup', method=['OPTIONS', 'GET'])
-def lookup():
-    # Allow CORS
+@hook('after_request')
+def enable_cors():
     response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, OPTIONS'
+    response.headers['Access-Control-Allow-Methods'] = 'PUT, GET, POST, DELETE, OPTIONS'
     response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
 
-    if request.method == 'OPTIONS':
-        return
-
+@route('/api/v1/lookup', method=['OPTIONS', 'GET'])
+def lookup():
     locations = request.query.locations
 
     if not locations:
