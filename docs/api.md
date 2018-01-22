@@ -116,7 +116,7 @@ If there is no recorded elevation at the provided coordinate, sea level (0 meter
 
 ```
 curl -X POST \
-  http://api.open-elevation.docker:1234/api/v1/lookup \
+  https://api.open-elevation.com/api/v1/lookup \
   -H 'Accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
