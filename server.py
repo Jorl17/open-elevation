@@ -79,19 +79,60 @@ def query_to_locations():
     return [lat_lng_from_location(l) for l in locations.split('|')]
 
 
-@route('/api/v1/lookup', method=['OPTIONS', 'GET'])
-def lookup():
+def body_to_locations():
     """
-    Main GET method.
+    Grab a list of locations from the body and turn them into [(lat,lng),(lat,lng),...]
     :return: 
     """
     try:
-        locations = query_to_locations()
+        locations = request.json.get('locations', None)
+    except ValueError:
+        raise InternalException(json.dumps({'error': 'Invalid JSON.'}))
+
+    if not locations:
+        raise InternalException(json.dumps({'error': '"Locations" is required in the body.'}))
+
+    latlng = []
+    for l in locations:
+        try:
+            latlng += [ (l['latitude'],l['longitude']) ]
+        except KeyError:
+            raise InternalException(json.dumps({'error': '"%s" is not in a valid format.' % l}))
+
+    return latlng
+
+
+def do_lookup(get_locations_func):
+    """
+    Generic method which gets the locations in [(lat,lng),(lat,lng),...] format by calling get_locations_func
+    and returns an answer ready to go to the client.
+    :return: 
+    """
+    try:
+        locations = get_locations_func()
         return {'results': [get_elevation(lat, lng) for (lat, lng) in locations]}
     except InternalException as e:
         response.status = 400
         response.content_type = 'application/json'
         return e.args[0]
+
+
+@route('/api/v1/lookup', method=['OPTIONS', 'GET'])
+def get_lookup():
+    """
+    GET method. Uses query_to_locations.
+    :return: 
+    """
+    return do_lookup(query_to_locations)
+
+
+@route('/api/v1/lookup', method=['POST'])
+def post_lookup():
+    """
+        GET method. Uses body_to_locations.
+        :return: 
+        """
+    return do_lookup(body_to_locations)
 
 #run(host='0.0.0.0', port=8080)
 run(host='0.0.0.0', port=8080, server='gunicorn', workers=4)
