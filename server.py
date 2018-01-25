@@ -86,7 +86,7 @@ def body_to_locations():
     """
     try:
         locations = request.json.get('locations', None)
-    except ValueError:
+    except Exception:
         raise InternalException(json.dumps({'error': 'Invalid JSON.'}))
 
     if not locations:
