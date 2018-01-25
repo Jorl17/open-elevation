@@ -79,7 +79,7 @@ The POST API currently has no limit
 ```
 {
     "locations":
-    {
+    [
         {
             "latitude": ...,
             "longitude": ...
