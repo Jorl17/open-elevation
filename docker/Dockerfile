@@ -4,7 +4,9 @@ ADD ./requirements.txt .
 
 RUN pip install -r requirements.txt
 
-RUN apt-get install -y libspatialindex-dev unrar-free bc
+RUN apt-get update
+
+RUN apt-get install -y libspatialindex-dev unar bc
 
 RUN mkdir /code
 
