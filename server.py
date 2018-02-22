@@ -19,7 +19,6 @@ Initialize a global interface. This can grow quite large, because it has a cache
 interface = GDALTileInterface('data/', 'data/summary.json')
 interface.create_summary_json()
 
-
 def get_elevation(lat, lng):
     """
     Get the elevation at point (lat,lng) using the currently opened interface
@@ -116,8 +115,15 @@ def do_lookup(get_locations_func):
         response.content_type = 'application/json'
         return e.args[0]
 
+# Base Endpoint
+URL_ENDPOINT = '/api/v1/lookup'
 
-@route('/api/v1/lookup', method=['OPTIONS', 'GET'])
+# For CORS
+@route(URL_ENDPOINT, method=['OPTIONS'])
+def cors_handler:
+    return {}
+
+@route(URL_ENDPOINT, method=['GET'])
 def get_lookup():
     """
     GET method. Uses query_to_locations.
@@ -126,7 +132,7 @@ def get_lookup():
     return do_lookup(query_to_locations)
 
 
-@route('/api/v1/lookup', method=['POST'])
+@route(URL_ENDPOINT, method=['POST'])
 def post_lookup():
     """
         GET method. Uses body_to_locations.
