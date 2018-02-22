@@ -120,7 +120,7 @@ URL_ENDPOINT = '/api/v1/lookup'
 
 # For CORS
 @route(URL_ENDPOINT, method=['OPTIONS'])
-def cors_handler:
+def cors_handler():
     return {}
 
 @route(URL_ENDPOINT, method=['GET'])
