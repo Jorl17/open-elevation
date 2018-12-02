@@ -17,3 +17,5 @@ WORKDIR /code
 CMD python server.py
 
 EXPOSE 8080
+
+EXPOSE 8443

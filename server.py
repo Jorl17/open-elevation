@@ -1,10 +1,13 @@
 import json
+import os.path
 
 import bottle
 from bottle import route, run, request, response, hook
 
 from gdal_interfaces import GDALTileInterface
 
+CERTFILE = 'cert/elev_chain.crt'
+KEYFILE = 'cert/elev_cert.key'
 
 class InternalException(ValueError):
     """
@@ -140,5 +143,8 @@ def post_lookup():
         """
     return do_lookup(body_to_locations)
 
-#run(host='0.0.0.0', port=8080)
-run(host='0.0.0.0', port=8080, server='gunicorn', workers=4)
+if os.path.isfile(CERTFILE) and os.path.isfile(KEYFILE):
+    run(host='0.0.0.0', port=8443, server='gunicorn', workers=4, certfile=CERTFILE, keyfile=KEYFILE)
+else:
+    run(host='0.0.0.0', port=8080, server='gunicorn', workers=4)
+

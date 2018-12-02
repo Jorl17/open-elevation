@@ -15,7 +15,7 @@ cd open-elevation
 
 An image of Open-Elevation is available at [DockerHub](https://hub.docker.com/r/openelevation/open-elevation/). You can use this image as the basis for your Open-Elevation installation.
 
-The Docker image roots itself at `/code/` and expects that all GeoTIFF datafiles be located at `/code/data/`, which you should mount using a volume.
+The Docker image roots itself at `/code/` and expects that all GeoTIFF datafiles be located at `/code/data/`, which you should mount using a volume. Optionaly, SSL certificate and key can be mounted at `/code/cert/`. See below.
 
 ### Prerequisites: Getting the dataset
 
@@ -48,16 +48,26 @@ The above example command splits `SRTM_NE_250m.tif` into 10 by 10 files inside t
 Now that you've got your data, you're ready to run Open-Elevation! Simply run
 
 ```
-docker run -t -i -v $(pwd)/data:/code/data -p 8080:8080 openelevation/open-elevation
+docker run -t -i -v $(pwd)/data:/code/data -p 80:8080 openelevation/open-elevation
 ```
 
 This command:
 
 1. Maps `$(pwd)/data` (your data directory) to `/code/data` within the container
-2. Exposes port 8080 to forward to the container's port 8080
+2. Exposes port 80 to forward to the container's port 8080
 3. Runs the default command, which is the server at port 8080
 
-You should now be able to go to `https://localhost:8080` for all your open-route needs.
+You should now be able to go to `http://localhost:80` for all your open-route needs.
+
+### Running the Server with SSL
+
+Before starting, the server check for SSL certificate and key files.
+If found, the server starts using SSL on port 8443.
+File names should be `/code/cert/elev_chain.crt` and `cert/elev_cert.key`. The following command will mount also `/code/cert` and run the server on port 443.
+
+```
+docker run -t -i -v $(pwd)/data:/code/data -v $(pwd)/cert:/code/cert -p 443:8443 openelevation/open-elevation
+```
 
 ## Without Docker
 
