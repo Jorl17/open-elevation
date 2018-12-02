@@ -57,17 +57,20 @@ This command:
 2. Exposes port 80 to forward to the container's port 8080
 3. Runs the default command, which is the server at port 8080
 
-You should now be able to go to `http://localhost:80` for all your open-route needs.
+You should now be able to go to `http://localhost` for all your open-route needs.
 
 ### Running the Server with SSL
 
 Before starting, the server check for SSL certificate and key files.
-If found, the server starts using SSL on port 8443.
-File names should be `/code/cert/elev_chain.crt` and `cert/elev_cert.key`. The following command will mount also `/code/cert` and run the server on port 443.
+If found, the server starts using SSL on port 8443. File names should be `/code/cert/elev_chain.crt` and `/code/cert/elev_cert.key`.
+
+The following command will mount also `/code/cert` and run the server on port 443:
 
 ```
 docker run -t -i -v $(pwd)/data:/code/data -v $(pwd)/cert:/code/cert -p 443:8443 openelevation/open-elevation
 ```
+
+You should now be able to go to `https://localhost` for all your open-route needs.
 
 ## Without Docker
 
