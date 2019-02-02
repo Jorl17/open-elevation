@@ -1,0 +1,14 @@
+[Unit]
+Description=Open-Elevation Server
+After=network.target
+
+[Service]
+Type=simple
+User=<<YOUR-USER>>
+WorkingDirectory=/home/<<YOUR-USER>>
+ExecStart=/usr/bin/env python <<PATH-TO-YOUR-SERVER.PY>>/server.py
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target
