@@ -9,15 +9,14 @@ A free and open-source elevation API by Jorl17. The original is available at: [h
 This service came out of the need to have a hosted, easy to use and easy to setup elevation API. While there are some alternatives out there, none of them work out of the box, and seem to point to dead datasets. <b>Open-Elevation</b> is easy to setup, has its own docker image and provides scripts for you to easily acquire whatever datasets you want.
 
 Open-Elevation API Doc for details and ustage
-#####     doc/API.md 
+#####     [doc/api.md](https://github.com/Developer66/open-elevation/blob/master/docs/api.md)
 
 
 -----
 # Changes to the original version:
 * changing TIFF file locations - to working one - for SRTM 250m data in download script
 * changing create-dataset.sh to work again
-* fixing download script
-* renamed api.md to API.md
+* fixing download scripts
 
 ### News:
 * added a preinstall documentation for dependencies
