@@ -27,6 +27,8 @@ Open-Elevation API Doc for details and ustage
     * adding java downloader for data from https://geoservice.dlr.de/
     * adding JavaProject to download and xxtract all files and put it to the right place
  
+### Bugs:
+ * SRTM 90M TanDEM data are 40 to high. Issue: [here](https://github.com/Developer66/open-elevation/issues/1)
 -----
 
 # How to install:
