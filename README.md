@@ -96,7 +96,9 @@ Fist of all clone this repository to your favourite location. (Use a permanent p
        ```
        http://0.0.0.0:10000/api/v1/lookup?locations=48.179138,10.703618
        ```
-    
+
+-----
+
 ### 90m TanDEM added myselfe (ca. 100GB)
 
 **Following step 1 to 3 from above**
@@ -145,6 +147,13 @@ Files from https://geoservice.dlr.de/ 30M are a little bit larger than the origi
 | Size of the global data set, zipped (including all annotations) | 253 GB
 | Size of the global data set, unzipped (including all annotations) | 534 GB
 | Size of all DEM raster files (unzipped, without annotations or meta data) | 93.8 GB
+
+-----
+
+### OpenDEM Europe 1arc-sec
+No java downloader yet!
+
+Files manually downloadable at: [https://opendem.info/opendemeu_download_4258.html](https://opendem.info/opendemeu_download_4258.html)
 
 -----
 
