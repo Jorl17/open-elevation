@@ -26,6 +26,7 @@ for x in $(eval echo {0..$(($xtiles-1))}); do
 
         # Create chunk of source raster
         gdal_translate -q \
+            -r cubicspline \
             -projwin $xmin $ymax $xmax $ymin \
             -of GTiff \
             $raster ${raster%.tif}_${x}_${y}.tif
