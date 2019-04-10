@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User=<<YOUR-USER>>
-WorkingDirectory=/home/<<YOUR-USER>>
+WorkingDirectory=/home/<<YOUR-USER>>/<<PATH-TO-YOUR-SERVER.PY>>
 ExecStart=/usr/bin/env python <<PATH-TO-YOUR-SERVER.PY>>/server.py
 Restart=always
 RestartSec=1
