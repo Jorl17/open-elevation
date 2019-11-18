@@ -218,9 +218,9 @@ You can use `docker-compose.yml` to build image, create and run docker container
 ```
 docker-compose -f docker-compose.yml up -d
 ```
-server will be available on host port 10000: 
+server will be available on host port 8080: 
 ```
-curl http://0.0.0.0:10000/api/v1/lookup?locations=42.216667,27.416667
+curl http://0.0.0.0:8080/api/v1/lookup?locations=42.216667,27.416667
 {"results": [{"latitude": 42.216667, "elevation": 262, "longitude": 27.416667}]}
 ```
 

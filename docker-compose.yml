@@ -1,14 +1,14 @@
 version: '3.1'
 services:
-  open-elevation:
-    container_name: docker
+  openelevation:
+    container_name: open-elevation
     build:
       context: .
       dockerfile: ./docker/Dockerfile
     networks:
       - elevnet
     ports:
-      - "10000:10000"
+      - "8080:10000"
     volumes:
       - ./data:/code/data
 networks:
