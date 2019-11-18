@@ -193,12 +193,16 @@ docker run -t -i -v $(pwd)/data:/code/data openelevation/open-elevation /code/cr
 The above example command splits `SRTM_NE_250m.tif` into 10 by 10 files inside the `/code/data` directory, which is mapped to `$(pwd)/data`.
 
 
-### Running the Server
+### Running the Server in Docker container
 
 Now that you've got your data, you're ready to run Open-Elevation! Simply run
 
 ```
 docker run -t -i -v $(pwd)/data:/code/data -p 8080:8080 openelevation/open-elevation
+```
+Build image only:
+```
+docker build . -f docker/Dockerfile
 ```
 
 This command:
@@ -209,6 +213,16 @@ This command:
 
 You should now be able to go to `https://localhost:8080` for all your open-route needs.
 
+## Docker compose
+You can use `docker-compose.yml` to build image, create and run docker container
+```
+docker-compose -f docker-compose.yml up -d
+```
+server will be available on host port 10000: 
+```
+curl http://0.0.0.0:10000/api/v1/lookup?locations=42.216667,27.416667
+{"results": [{"latitude": 42.216667, "elevation": 262, "longitude": 27.416667}]}
+```
 
 ## Problems
 
