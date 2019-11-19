@@ -11,9 +11,9 @@ import org.apache.commons.io.FilenameUtils;
 
 /**
  * Download Task
- * 
+ *
  * Downloading the zip file and start the decompress thread
- * 
+ *
  * @author crypto
  *
  */
@@ -44,7 +44,7 @@ public class DownloadTask implements Runnable {
 
   /**
    * Download the file from param and starte the ZipHandler as an thread
-   * 
+   *
    * @param webUrl
    */
   public void downloadFile(String webUrl) {
@@ -63,7 +63,7 @@ public class DownloadTask implements Runnable {
 
       // Building username and pass for login
       String userpass = username + ":" + passwd;
-      String basicAuth = "Basic " + new String(Base64.getEncoder().encodeToString(userpass.getBytes()));
+      String basicAuth = "Basic " + Base64.getEncoder().encodeToString(userpass.getBytes());
       urlConnection.setRequestProperty("Authorization", basicAuth);
 
       // opens input stream from the HTTP connection
@@ -83,7 +83,7 @@ public class DownloadTask implements Runnable {
       urlConnection.disconnect();
       inputStream.close();
       outputStream.close();
-    
+
       // Start decompress Thread
       new Thread(new ZipHandler(new File(saveFilePath), outputDir)).start();
     } catch (Exception e) {
