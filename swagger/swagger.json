@@ -22,7 +22,7 @@
                     {
                         "in": "body",
                         "name": "locations",
-                        "description": "42.216667,27.416667",
+                        "description": "locations: [{latitude: 42.216667,longitude: 27.416667}]",
                         "type": "string"
                     }
                 ],
