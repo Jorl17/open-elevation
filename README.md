@@ -224,6 +224,63 @@ curl http://0.0.0.0:8080/api/v1/lookup?locations=42.216667,27.416667
 {"results": [{"latitude": 42.216667, "elevation": 262, "longitude": 27.416667}]}
 ```
 
+## Generate API clients from swagger.json
+#### React Client
+We use [swagger-js-codegen](https://github.com/wcandillon/swagger-js-codegen)
+```javascript
+const fs = require('fs');
+const {CodeGen} = require('swagger-js-codegen');
+
+const swaggerFile = 'swagger/swagger.json';
+const className = 'OpenElevationRestClient';
+const swagger = JSON.parse(fs.readFileSync(swaggerFile, 'UTF-8'));
+
+const elevationReactCode = CodeGen.getReactCode({
+    moduleName: className,
+    className,
+    swagger,
+    isES6: true,
+});
+save(elevationReactCode, className, '.js');
+
+function save(code, fileName, ext = '.js') {
+    const outputDir = 'src/swagger/generated/';
+    const outputFile = outputDir + fileName;
+
+    if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir);
+    }
+    fs.writeFileSync(outputFile + ext, '/* eslint-disable */\n/* This file is generated! Do not edit, your changes will be overridden */\n');
+
+    fs.appendFileSync(outputFile + ext, code);
+}
+```
+Example usage:
+
+```javascript
+
+new OpenElevationRestClient().getLookup({locations: '42.216667,27.416667'}).then((results) => {
+            console.log(results);
+            return true;
+        }).catch((error) => {
+            console.log('Error getLookup:' + error);
+        });
+new OpenElevationRestClient().postLookup({
+            json: {
+                locations: [{
+                    latitude: 42.216667,
+                    longitude: 27.416667
+                }]
+            }
+        }).then((results) => {
+            console.log(results);
+            return true;
+        }).catch((error) => {
+            console.log('Error postLookup:' + error);
+        });
+```
+
+
 ## Problems
 
 Have you found any problems? Open an issue or submit your own pull request!
