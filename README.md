@@ -54,6 +54,9 @@ Fist of all clone this repository to your favourite location. (Use a permanent p
     // Add libgal-dev
     sudo apt-get install libgdal-dev
     
+    // Add unar
+    sudo apt install unar
+    
     // Create system vars
     export CPLUS_INCLUDE_PATH=/usr/include/gdal
     export C_INCLUDE_PATH=/usr/include/gdal
