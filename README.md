@@ -32,10 +32,10 @@ Open-Elevation API Doc for details and ustage
 -----
 
 # How to install:
-*It testet the install procedure on a fresh Ubuntu 18.10.*
+*I tested the install procedure on a fresh Ubuntu 18.10.*
 
 
-Fist of all clone this repository to your favourite location. (Use a permanent place for it where it won't be deletet)
+Fist of all clone this repository to your favourite location. (Use a permanent place for it where it won't be deleted)
 
 ### Default 250m files (after procedure ca. 20GB)
 1. Make sure your system is up-to-date
@@ -54,28 +54,30 @@ Fist of all clone this repository to your favourite location. (Use a permanent p
     // Add libgal-dev
     sudo apt-get install libgdal-dev
     
-    //Create system vars
+    // Create system vars
     export CPLUS_INCLUDE_PATH=/usr/include/gdal
     export C_INCLUDE_PATH=/usr/include/gdal
     
     sudo apt install python3-rtree
     ```
+  
 3. Install pip dependencies
 
     ```
-    pip -r requirements.txt
+    pip install -r requirements.txt
     ```
+ 
 4. Download and progress GeoTIFFs
     ```
     ##  open terminal and cd to your open-elevation dir ##
-    //mark scripts as executable
+    // Mark scripts as executable
     sudo chmod +x download-srtm-data.sh create-tiles.sh create-dataset.sh
     
-    //Execute
+    // Execute
     ./create-dataset.sh
     ```
-    The script is downloading and progressing it now automatically
-    * this can take some time - up to 2 hours*
+    
+    The script should be downloading at this point and * this can take some time - up to 2 hours *.
 
 5. **Optional** Adding Service to your computer (e.g. autostart)
     ```
@@ -87,6 +89,8 @@ Fist of all clone this repository to your favourite location. (Use a permanent p
     //Following Commands can be used
     sudo service open-elevation start | stop | restart
     ```
+    
+    This service file (found in this repository at open-elevation.service) will also contain information to be specified manually such as the user and various pathways to the working directory.
     
 6. Your server is now running reachable at 0.0.0.0:10000. **Congratulation**
    
