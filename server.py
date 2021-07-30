@@ -1,5 +1,7 @@
 import configparser
 import json
+import os
+
 from bottle import route, run, request, response, hook
 from gdal_interfaces import GDALTileInterface
 
@@ -20,6 +22,9 @@ DATA_FOLDER = parser.get('server', 'data-folder')
 OPEN_INTERFACES_SIZE = parser.getint('server', 'open-interfaces-size')
 URL_ENDPOINT = parser.get('server', 'endpoint')
 ALWAYS_REBUILD_SUMMARY = parser.getboolean('server', 'always-rebuild-summary')
+CERTS_FOLDER = parser.get('server', 'certs-folder')
+CERT_FILE = '%s/cert.crt' % CERTS_FOLDER
+KEY_FILE = '%s/cert.key' % CERTS_FOLDER
 
 
 """
@@ -152,4 +157,9 @@ def post_lookup():
     """
     return do_lookup(body_to_locations)
 
-run(host=HOST, port=PORT, server='gunicorn', workers=NUM_WORKERS)
+if os.path.isfile(CERT_FILE) and os.path.isfile(KEY_FILE):
+    print('Using HTTPS')
+    run(host=HOST, port=PORT, server='gunicorn', workers=NUM_WORKERS, certfile=CERT_FILE, keyfile=KEY_FILE)
+else:
+    print('Using HTTP')
+    run(host=HOST, port=PORT, server='gunicorn', workers=NUM_WORKERS)

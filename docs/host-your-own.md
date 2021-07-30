@@ -17,6 +17,8 @@ An image of Open-Elevation is available at [DockerHub](https://hub.docker.com/r/
 
 The Docker image roots itself at `/code/` and expects that all GeoTIFF datafiles be located at `/code/data/`, which you should mount using a volume. You can also change this directory by [changing the configuration file](#configuration-file)
 
+If you want HTTPS, an SSL certificate and key can be mounted at `/code/certs/`. See below.
+
 ### Prerequisites: Getting the dataset
 
 Open-Elevation doesn't come with any data of its own, but it offers a set of scripts to get the whole [SRTM 250m dataset](https://srtm.csi.cgiar.org).
@@ -53,16 +55,42 @@ The above example command splits `SRTM_NE_250m.tif` into 10 by 10 files inside t
 Now that you've got your data, you're ready to run Open-Elevation! Simply run
 
 ```
-docker run -t -i -v $(pwd)/data:/code/data -p 8080:8080 openelevation/open-elevation
+docker run -t -i -v $(pwd)/data:/code/data -p 80:8080 openelevation/open-elevation
 ```
 
 This command:
 
 1. Maps `$(pwd)/data` (your data directory) to `/code/data` within the container
-2. Exposes port 8080 to forward to the container's port 8080
+2. Exposes port 80 to forward to the container's port 8080
 3. Runs the default command, which is the server at port 8080
 
-You should now be able to go to `https://localhost:8080` for all your open elevation needs.
+You should now be able to go to `http://localhost` for all your open-route needs.
+
+### Running the Server with SSL
+
+Before starting, the server check for SSL certificate and key files.
+If found, the server starts using SSL on port 8443. File names should be `/code/cert/elev_chain.crt` and `/code/cert/elev_cert.key`.
+
+The following command will mount also `/code/cert` and run the server on port 443:
+
+```
+docker run -t -i -v $(pwd)/data:/code/data -v $(pwd)/cert:/code/cert -p 443:8443 openelevation/open-elevation
+```
+
+You should now be able to go to `https://localhost` for all your open-route needs.
+
+
+### Running the Server with SSL
+
+Before starting, the server checks for an SSL certificate and key files at the `certs/`subdirectory (this can be changed in the config file).
+If found, the server boots using SSL/HTTPS (and only that). File names should be `/code/cert/cert.crt` and `/code/cert/cert.key`.
+
+The following command will mount also `/code/certs` and run the server on port 443:
+
+```
+docker run -t -i -v $(pwd)/data:/code/data -v $(pwd)/certs:/code/certs -p 443:8080 openelevation/open-elevation
+```
+
 
 ## Without Docker
 
@@ -115,12 +143,11 @@ python server.py
 
 And you should be good to go!
 
+### Running the Server with SSL
+
+Before starting, the server checks for an SSL certificate and key files at the `certs/`subdirectory (this can be changed in the config file).
+If found, the server boots using SSL/HTTPS (and only that). File names should be `/code/cert/cert.crt` and `/code/cert/cert.key`.
+
 ## Problems
 
 Have you found any problems? Open an issue or submit your own pull request!
-
-## Configuration file
-
-Open-Elevation reads values from a configuration file located in its root directory (`config.ini`). This file allows you to change several settings, such as the location of the data directory, the port and IP to bind to, or the number of gunicorn workers.
-
-If you are running docker, you need to pass the modified config file as a volume onto your docker container, e.g. with `v $(pwd)/config.ini:/code/config.ini`.
