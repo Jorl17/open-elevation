@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+    server:
+        restart: always
+        build:
+            context: .
+            dockerfile: ./docker/Dockerfile
+        volumes:
+            - "./data:/code/data"
+        environment:
+            - PYTHONUNBUFFERED=1
+        command: stdbuf -i0 -o0 -e0 python3 server.py
+        ports:
+            - 8080:8080
+
