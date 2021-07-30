@@ -12,3 +12,10 @@ If you enjoy our service, please consider [donating to us](https://open-elevatio
 
 You can learn more about the project, including its **free public API** in [the website](https://open-elevation.com)
 
+## Donations
+
+Please consider donating to keep the public API alive. This API is **used by millions of users every day** and it costs money to keep running!
+
+You can donate [by following this link](https://www.paypal.com/donate?token=zMhG6a7DTvQxK8By9gF63yPFbdp69DY5Pjrx2NdphDFo_ocu4J3AlMLERndRBnNA7-JL1eBAoGXSVHdh).
+
+
