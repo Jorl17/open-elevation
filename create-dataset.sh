@@ -7,6 +7,8 @@ fi
 
 CUR_DIR=$(pwd)
 
+set -eu
+
 cd $OUTDIR
 ../download-srtm-data.sh
 ../create-tiles.sh SRTM_NE_250m.tif 10 10

@@ -10,6 +10,8 @@ This service came out of the need to have a hosted, easy to use and easy to setu
 
 If you enjoy our service, please consider [donating to us](https://open-elevation.com#donate). Servers aren't free :)
 
+**API Docs are [available here](https://github.com/Jorl17/open-elevation/blob/master/docs/api.md)**
+
 You can learn more about the project, including its **free public API** in [the website](https://open-elevation.com)
 
 ## Donations
