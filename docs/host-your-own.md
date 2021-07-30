@@ -19,7 +19,7 @@ The Docker image roots itself at `/code/` and expects that all GeoTIFF datafiles
 
 ### Prerequisites: Getting the dataset
 
-Open-Elevation doesn't come with any data of its own, but it offers a set of scripts to get the whole [SRTM 250m dataset](http://gisweb.ciat.cgiar.org/TRMM/SRTM_Resampled_250m/).
+Open-Elevation doesn't come with any data of its own, but it offers a set of scripts to get the whole [SRTM 250m dataset](https://srtm.csi.cgiar.org).
 
 #### Whole World
 
