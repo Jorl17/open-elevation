@@ -1,8 +1,6 @@
+import configparser
 import json
-
-import bottle
 from bottle import route, run, request, response, hook
-
 from gdal_interfaces import GDALTileInterface
 
 
@@ -12,19 +10,35 @@ class InternalException(ValueError):
     """
     pass
 
+print('Reading config file ...')
+parser = configparser.ConfigParser()
+parser.read('config.ini')
+HOST = parser.get('server', 'host')
+PORT = parser.getint('server', 'port')
+NUM_WORKERS = parser.getint('server', 'workers')
+DATA_FOLDER = parser.get('server', 'data-folder')
+OPEN_INTERFACES_SIZE = parser.getint('server', 'open-interfaces-size')
+URL_ENDPOINT = parser.get('server', 'endpoint')
+ALWAYS_REBUILD_SUMMARY = parser.getboolean('server', 'always-rebuild-summary')
+
 
 """
 Initialize a global interface. This can grow quite large, because it has a cache.
 """
-interface = GDALTileInterface('data/', 'data/summary.json')
-interface.create_summary_json()
+interface = GDALTileInterface(DATA_FOLDER, '%s/summary.json' % DATA_FOLDER, OPEN_INTERFACES_SIZE)
 
+if interface.has_summary_json() and not ALWAYS_REBUILD_SUMMARY:
+    print('Re-using existing summary JSON')
+    interface.read_summary_json()
+else:
+    print('Creating summary JSON ...')
+    interface.create_summary_json()
 
 def get_elevation(lat, lng):
     """
     Get the elevation at point (lat,lng) using the currently opened interface
-    :param lat: 
-    :param lng: 
+    :param lat:
+    :param lng:
     :return:
     """
     try:
@@ -47,7 +61,7 @@ def get_elevation(lat, lng):
 def enable_cors():
     """
     Enable CORS support.
-    :return: 
+    :return:
     """
     response.headers['Access-Control-Allow-Origin'] = '*'
     response.headers['Access-Control-Allow-Methods'] = 'PUT, GET, POST, DELETE, OPTIONS'
@@ -57,8 +71,8 @@ def enable_cors():
 def lat_lng_from_location(location_with_comma):
     """
     Parse the latitude and longitude of a location in the format "xx.xxx,yy.yyy" (which we accept as a query string)
-    :param location_with_comma: 
-    :return: 
+    :param location_with_comma:
+    :return:
     """
     try:
         lat, lng = [float(i) for i in location_with_comma.split(',')]
@@ -70,7 +84,7 @@ def lat_lng_from_location(location_with_comma):
 def query_to_locations():
     """
     Grab a list of locations from the query and turn them into [(lat,lng),(lat,lng),...]
-    :return: 
+    :return:
     """
     locations = request.query.locations
     if not locations:
@@ -82,11 +96,11 @@ def query_to_locations():
 def body_to_locations():
     """
     Grab a list of locations from the body and turn them into [(lat,lng),(lat,lng),...]
-    :return: 
+    :return:
     """
     try:
         locations = request.json.get('locations', None)
-    except ValueError:
+    except Exception:
         raise InternalException(json.dumps({'error': 'Invalid JSON.'}))
 
     if not locations:
@@ -106,7 +120,7 @@ def do_lookup(get_locations_func):
     """
     Generic method which gets the locations in [(lat,lng),(lat,lng),...] format by calling get_locations_func
     and returns an answer ready to go to the client.
-    :return: 
+    :return:
     """
     try:
         locations = get_locations_func()
@@ -116,23 +130,26 @@ def do_lookup(get_locations_func):
         response.content_type = 'application/json'
         return e.args[0]
 
+# For CORS
+@route(URL_ENDPOINT, method=['OPTIONS'])
+def cors_handler():
+    return {}
 
-@route('/api/v1/lookup', method=['OPTIONS', 'GET'])
+@route(URL_ENDPOINT, method=['GET'])
 def get_lookup():
     """
     GET method. Uses query_to_locations.
-    :return: 
+    :return:
     """
     return do_lookup(query_to_locations)
 
 
-@route('/api/v1/lookup', method=['POST'])
+@route(URL_ENDPOINT, method=['POST'])
 def post_lookup():
     """
-        GET method. Uses body_to_locations.
-        :return: 
-        """
+    GET method. Uses body_to_locations.
+    :return:
+    """
     return do_lookup(body_to_locations)
 
-#run(host='0.0.0.0', port=8080)
-run(host='0.0.0.0', port=8080, server='gunicorn', workers=4)
+run(host=HOST, port=PORT, server='gunicorn', workers=NUM_WORKERS)

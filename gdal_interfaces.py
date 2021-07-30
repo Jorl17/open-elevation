@@ -1,9 +1,8 @@
 import os
 from osgeo import gdal, osr
 from lazy import lazy
-from pprint import pprint
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, getsize
 import json
 from rtree import index
 
@@ -122,24 +121,31 @@ class GDALTileInterface(object):
     def _all_files(self):
         return [f for f in listdir(self.tiles_folder) if isfile(join(self.tiles_folder, f)) and f.endswith(u'.tif')]
 
+    def has_summary_json(self):
+        return os.path.exists(self.summary_file)
+
     def create_summary_json(self):
         all_coords = []
         for file in self._all_files():
-
             full_path = join(self.tiles_folder,file)
+            print('Processing %s ... (%s MB)' % (full_path, getsize(full_path) / 2**20))
             i = self._open_gdal_interface(full_path)
             coords = i.get_corner_coords()
+
+            lmin, lmax = coords['BOTTOM_RIGHT'][1], coords['TOP_RIGHT'][1]
+            lngmin, lngmax = coords['TOP_LEFT'][0], coords['TOP_RIGHT'][0]
             all_coords += [
                 {
                     'file': full_path,
-                    'coords': ( coords['BOTTOM_RIGHT'][1],  # latitude min
-                                coords['TOP_RIGHT'][1],  # latitude max
-                                coords['TOP_LEFT'][0],  # longitude min
-                                coords['TOP_RIGHT'][0],  # longitude max
+                    'coords': ( lmin,  # latitude min
+                                lmax,  # latitude max
+                                lngmin,  # longitude min
+                                lngmax,  # longitude max
 
                                 )
                 }
             ]
+            print('\tDone! LAT (%s,%s) | LNG (%s,%s)' % (lmin, lmax, lngmin, lngmax))
 
         with open(self.summary_file, 'w') as f:
             json.dump(all_coords, f)
@@ -155,7 +161,6 @@ class GDALTileInterface(object):
         self._build_index()
 
     def lookup(self, lat, lng):
-
         nearest = list(self.index.nearest((lat, lng), 1, objects=True))
 
         if not nearest:
@@ -167,6 +172,7 @@ class GDALTileInterface(object):
             return int(gdal_interface.lookup(lat, lng))
 
     def _build_index(self):
+        print('Building spatial index ...')
         index_id = 1
         for e in self.all_coords:
             e['index_id'] = index_id

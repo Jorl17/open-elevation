@@ -15,7 +15,7 @@ cd open-elevation
 
 An image of Open-Elevation is available at [DockerHub](https://hub.docker.com/r/openelevation/open-elevation/). You can use this image as the basis for your Open-Elevation installation.
 
-The Docker image roots itself at `/code/` and expects that all GeoTIFF datafiles be located at `/code/data/`, which you should mount using a volume.
+The Docker image roots itself at `/code/` and expects that all GeoTIFF datafiles be located at `/code/data/`, which you should mount using a volume. You can also change this directory by [changing the configuration file](#configuration-file)
 
 ### Prerequisites: Getting the dataset
 
@@ -34,7 +34,7 @@ The above command should have downloaded the entire SRTM dataset and split it in
 
 #### Custom Data
 
-If you don't want to use the whole world, you can provide your own dataset in GeoTIFF format, compatible with the SRTM dataset. Simply drop the files for the regions you desire in the `data` directory. You are advised to split these files in smaller chunks so as to make Open-Elevation less memory-hungry (the largest file has to fit in memory). The `create-tiles.sh` is capable of doing this, and you can see it working in `create-dataset.sh`. Since you are using docker, you should always run the commands within the container. For example:
+If you don't want to use the whole world, or wish to use another data source, you can provide your own dataset in GeoTIFF format, compatible with the SRTM dataset. Simply drop the files for the regions you desire in the `data` directory. You are advised to split these files in smaller chunks to make Open-Elevation less memory-hungry (the largest file has to fit in memory). The `create-tiles.sh` is capable of doing this, and you can see it working in `create-dataset.sh`. Since you are using docker, you should always run the commands within the container. For example:
 
 ```
 docker run -t -i -v $(pwd)/data:/code/data openelevation/open-elevation /code/create-tiles.sh  /code/data/SRTM_NE_250m.tif 10 10
@@ -57,7 +57,7 @@ This command:
 2. Exposes port 8080 to forward to the container's port 8080
 3. Runs the default command, which is the server at port 8080
 
-You should now be able to go to `https://localhost:8080` for all your open-route needs.
+You should now be able to go to `https://localhost:8080` for all your open elevation needs.
 
 ## Without Docker
 
@@ -98,6 +98,8 @@ If you don't want to use the whole world, you can provide your own dataset in Ge
 
 After this process, you should now have your dataset in the `tiles` subdirectory. You're good to go!
 
+Note that the server expects all GeoTIFF files to be in a `data` folder (not `tiles`).  You can also change this directory by [changing the configuration file](#configuration-file)
+
 ### Running the server
 
 Now that you've got your data, you're ready to run Open-Elevation! Simply run
@@ -111,3 +113,9 @@ And you should be good to go!
 ## Problems
 
 Have you found any problems? Open an issue or submit your own pull request!
+
+## Configuration file
+
+Open-Elevation reads values from a configuration file located in its root directory (`config.ini`). This file allows you to change several settings, such as the location of the data directory, the port and IP to bind to, or the number of gunicorn workers.
+
+If you are running docker, you need to pass the modified config file as a volume onto your docker container, e.g. with `v $(pwd)/config.ini:/code/config.ini`.
