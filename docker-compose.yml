@@ -8,6 +8,7 @@ services:
             dockerfile: ./docker/Dockerfile
         volumes:
             - "./data:/code/data"
+            - "./certs:/code/certs"
         environment:
             - PYTHONUNBUFFERED=1
         command: stdbuf -i0 -o0 -e0 python3 server.py

@@ -15,6 +15,7 @@ class InternalException(ValueError):
 print('Reading config file ...')
 parser = configparser.ConfigParser()
 parser.read('config.ini')
+
 HOST = parser.get('server', 'host')
 PORT = parser.getint('server', 'port')
 NUM_WORKERS = parser.getint('server', 'workers')

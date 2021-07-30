@@ -68,22 +68,8 @@ You should now be able to go to `http://localhost` for all your open-route needs
 
 ### Running the Server with SSL
 
-Before starting, the server check for SSL certificate and key files.
-If found, the server starts using SSL on port 8443. File names should be `/code/cert/elev_chain.crt` and `/code/cert/elev_cert.key`.
-
-The following command will mount also `/code/cert` and run the server on port 443:
-
-```
-docker run -t -i -v $(pwd)/data:/code/data -v $(pwd)/cert:/code/cert -p 443:8443 openelevation/open-elevation
-```
-
-You should now be able to go to `https://localhost` for all your open-route needs.
-
-
-### Running the Server with SSL
-
 Before starting, the server checks for an SSL certificate and key files at the `certs/`subdirectory (this can be changed in the config file).
-If found, the server boots using SSL/HTTPS (and only that). File names should be `/code/cert/cert.crt` and `/code/cert/cert.key`.
+If found, the server boots using SSL/HTTPS (and only that). File names should be `/code/certs/cert.crt` and `/code/certs/cert.key`.
 
 The following command will mount also `/code/certs` and run the server on port 443:
 
@@ -146,7 +132,7 @@ And you should be good to go!
 ### Running the Server with SSL
 
 Before starting, the server checks for an SSL certificate and key files at the `certs/`subdirectory (this can be changed in the config file).
-If found, the server boots using SSL/HTTPS (and only that). File names should be `/code/cert/cert.crt` and `/code/cert/cert.key`.
+If found, the server boots using SSL/HTTPS (and only that). File names should be `/code/certs/cert.crt` and `/code/certs/cert.key`.
 
 ## Problems
 
