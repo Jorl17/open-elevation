@@ -1,17 +1,15 @@
-FROM geodata/gdal:2.1.3
+FROM osgeo/gdal:ubuntu-small-latest-amd64
+
+RUN apt-get update
+RUN apt-get install -y libspatialindex-dev unar bc python3-pip wget
 
 ADD ./requirements.txt .
-
 RUN pip install -r requirements.txt
 
-RUN apt-get install -y libspatialindex-dev unrar-free bc
-
 RUN mkdir /code
-
 ADD . /code/
 
 WORKDIR /code
-
-CMD python server.py
+CMD python3 server.py
 
 EXPOSE 8080
