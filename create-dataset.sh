@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
 OUTDIR="/code/data"
-if [ ! -e $OUTDIR ] ; then
-    echo $OUTDIR does not exist!
-fi
+mkdir -p $OUTDIR
 
 CUR_DIR=$(pwd)
 
