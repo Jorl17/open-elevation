@@ -1,6 +1,7 @@
 FROM osgeo/gdal:ubuntu-small-latest-amd64
 
 RUN apt-get update
+ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y libspatialindex-dev unar bc python3-pip wget
 
 ADD ./requirements.txt .
