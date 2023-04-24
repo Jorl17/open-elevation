@@ -1,5 +1,7 @@
-lazy==1.4
-GDAL==3.3.1
 bottle==0.12.19
-rtree==0.8.3
+GDAL==3.7.0
 gunicorn==20.1.0
+lazy==1.4
+numpy==1.21.5
+Pillow==9.0.1
+Rtree==0.8.3
